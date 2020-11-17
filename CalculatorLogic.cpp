@@ -12,7 +12,7 @@ void CalculatorLogic::doCommand(QString button)
     if(button=="+"|| button=="-" || button=="*" || button=="/")
       {
 
-        if(op=="")
+        if(op=="") //prvi put se unosi znak za operaciju
        {
             if(strNum=="")
             {
@@ -25,11 +25,41 @@ void CalculatorLogic::doCommand(QString button)
             first=strNum;
             strNum="";
         }
-        else
+        else if(op!="" && strNum=="")
         {
             //za slucaj da se unese "11+-", treba da bude upamceno "11-"
             history.chop(1);
             history+=button;
+        }
+        else
+        {
+            history+=button;
+            //nadovezivanje operacija
+            if(op=="+")
+            {
+                double t=first.toDouble()+strNum.toDouble();
+                first=QString::number(t);
+
+            }
+            else if(op=="-")
+            {
+                double t=first.toDouble()-strNum.toDouble();
+                first=QString::number(t);
+
+            }
+            else if(op=="*")
+            {
+                double t=first.toDouble()*strNum.toDouble();
+                first=QString::number(t);
+
+            }
+            else if(op=="/")
+            {
+                double t=first.toDouble()/strNum.toDouble();
+                first=QString::number(t);
+
+            }
+            strNum="";
         }
         op=button;
     }
@@ -82,15 +112,15 @@ void CalculatorLogic::doCommand(QString button)
             history+="0";
 
         }
-        if(!result.contains(".")) //ukoliko u broju vec ne postoji decimalna tacka
+        if(!strNum.contains(".")) //ukoliko u broju vec ne postoji decimalna tacka
         {
-            /*double value=strNum.toDouble();
-            strNum=QString::number(value)+".";*/
+
             strNum+=button; //dodaje se tacka
+            history+=button;
 
         }
         result=strNum;
-        history+=button;
+
 
     }
     else if(button=="=")
