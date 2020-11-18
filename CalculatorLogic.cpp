@@ -68,8 +68,11 @@ void CalculatorLogic::doCommand(QString button)
     {
 
         strNum="";
-        value=0.0;
-        result=QString::number(value);
+        first="";
+        op="";
+        result="";
+
+
 
     }
     else if(button=="←")
@@ -125,6 +128,10 @@ void CalculatorLogic::doCommand(QString button)
     }
     else if(button=="=")
     {
+        if(strNum=="")
+        {
+            return;
+        }
         history+=button;
         if(op=="")
         {
