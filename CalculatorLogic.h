@@ -17,21 +17,17 @@ signals:
     void resultHistoryChanged(QString);
 
 private:
-    double value;
-    double tempNum;
-    bool decimalNum;
-
-
     QString op;
     QString strNum="";
     QString first="";
 
     QString result;
     QString history;
+    QString historyChanged;
 
 public:
     QString getResult() const { return result; };
-    QString getHistory() const { return history; };
+    QString getHistory() const { return historyChanged; };
 };
 
 #endif // CALCULATORLOGIC_H

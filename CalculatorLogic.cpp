@@ -14,10 +14,17 @@ void CalculatorLogic::doCommand(QString button)
 
         if(op=="") //prvi put se unosi znak za operaciju
        {
-            if(strNum=="")
+            if(strNum=="" && result=="")
             {
+                //ukoliko se unosi operacija bez prvog operanda, prvi operand je 0
                 strNum="0";
                 history+="0";
+            }
+            if(strNum=="" && result!="")
+            {
+                //ukoliko se operacija nadovezuje na prethodni rezultat
+                strNum=result;
+                history+=result;
             }
 
             history+=button;
@@ -71,6 +78,7 @@ void CalculatorLogic::doCommand(QString button)
         first="";
         op="";
         result="";
+        history="";
 
 
 
@@ -82,22 +90,46 @@ void CalculatorLogic::doCommand(QString button)
            strNum.chop(1);
            history.chop(1);
            result=strNum;
-
-           ////////////
        }
 
     }
     else if(button=="±")
     {
-        value=strNum.toDouble()*(-1);
+        if(strNum=="")
+        {
+            strNum=result;
+            history+=strNum;
+        }
+        history.chop(strNum.length()); //iz istorije se brise broj ciji se znak menja
+        double value=strNum.toDouble()*(-1);
         result=QString::number(value);
+        strNum=result;
 
-        history+="±"+result;
+        history+=result;
 
 
     }
     else if(button=="√")
     {
+            if(strNum=="" && result=="")
+            {
+                strNum="0";
+                history+=strNum;
+
+            }
+            else if(first=="" && result!="")
+            {
+                history="";
+            }
+            else if(result!="")
+            {
+                strNum=result;
+                if(history=="")
+                {
+                   history+=strNum;
+                }
+            }
+
             history.chop(strNum.length()); //broj ciji se koren trazi
             history+=button+strNum;
             double sqRoot=qSqrt(strNum.toDouble());
@@ -166,7 +198,7 @@ void CalculatorLogic::doCommand(QString button)
                 if(strNum.toDouble()==0.0)
                 {
                    result="NAN";
-                   history=result;
+
                 }
                 else
                 {
@@ -182,12 +214,14 @@ void CalculatorLogic::doCommand(QString button)
 
 
         }
-         emit resultHistoryChanged(history);
+         historyChanged+=history;
+         history="";
+         emit resultHistoryChanged(historyChanged);
     }
     else
     {
-        history+=button;
         //broj
+        history+=button;
         strNum+=button;
         result=strNum;
     }
