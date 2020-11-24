@@ -1,0 +1,4 @@
+Hp,90,#1a5276
+Canon,10,#ff5733
+Xerox,50,#0e6655
+Epson,74,#f1c40f
